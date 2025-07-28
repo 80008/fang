@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>For You ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            color: white;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+            padding: 40px 20px;
+            max-width: 400px;
+            width: 100%;
+            animation: slideUp 1s ease-out;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 50px;
+            box-shadow: 0 20px 40px rgba(255, 107, 157, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #ff6b9d, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 40px;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .message-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px 25px;
+            margin-bottom: 40px;
+            text-align: left;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .message-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            border: none;
+            color: white;
+            padding: 18px 40px;
+            font-size: 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+            font-weight: 500;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button:active {
+            transform: translateY(2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.6);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .floating-heart {
+            position: fixed;
+            font-size: 20px;
+            pointer-events: none;
+            z-index: 1000;
+            animation: floatUp 2s ease-out forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) rotate(180deg);
+            }
+        }
+
+        @keyframes heartBurst {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .heart-burst {
+            position: fixed;
+            font-size: 24px;
+            pointer-events: none;
+            z-index: 1000;
+            animation: heartBurst 1s ease-out forwards;
+        }
+
+        /* 苹果设备优化 */
+        @supports (-webkit-touch-callout: none) {
+            .container {
+                padding-bottom: max(40px, env(safe-area-inset-bottom));
+            }
+        }
+
+        /* 响应式优化 */
+        @media (max-height: 700px) {
+            .avatar {
+                width: 80px;
+                height: 80px;
+                font-size: 35px;
+                margin-bottom: 20px;
+            }
+            .title {
+                font-size: 2rem;
+            }
+            .message-card {
+                padding: 20px;
+                margin-bottom: 30px;
+            }
+        }
+
+        @media (max-width: 375px) {
+            .title {
+                font-size: 2.2rem;
+            }
+            .message-card {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+
+    <div class="container">
+        <div class="avatar">💖</div>
+        
+        <h1 class="title">Hey Beautiful</h1>
+        <p class="subtitle">有些话想对你说</p>
+        
+        <div class="message-card">
+            <div class="message-text">
+                遇见你之后，生活变得有了色彩。<br><br>
+                你的笑容是我见过最美的风景，<br>
+                你的陪伴是我最珍贵的礼物。<br><br>
+                想和你一起看日出日落，<br>
+                想和你分享生活中的每个瞬间。
+            </div>
+        </div>
+
+        <button class="cta-button" onclick="showLove()">
+            💕 Touch Me
+        </button>
+    </div>
+
+    <script>
+        // 创建星空背景
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            const numberOfStars = 100;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (2 + Math.random() * 2) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // 点击按钮效果
+        function showLove() {
+            const messages = [
+                "你是我的小宇宙 🌟",
+                "想把所有美好都给你 🎁",
+                "每天都想抱抱你 🤗",
+                "你让我相信童话 ✨",
+                "和你在一起真的很幸福 😊",
+                "你是我心中的光 💡"
+            ];
+
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            
+            // 震动反馈 (仅支持的设备)
+            if (navigator.vibrate) {
+                navigator.vibrate([100, 50, 100]);
+            }
+
+            // 爱心爆炸效果
+            createHeartBurst();
+            
+            // 显示消息
+            setTimeout(() => {
+                alert(randomMessage);
+            }, 300);
+        }
+
+        // 爱心爆炸效果
+        function createHeartBurst() {
+            const hearts = ['💕', '❤️', '💖', '💝'];
+            const button = document.querySelector('.cta-button');
+            const rect = button.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            for (let i = 0; i < 12; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart-burst';
+                heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = centerX + 'px';
+                heart.style.top = centerY + 'px';
+                
+                const angle = (i * 30) * Math.PI / 180;
+                const distance = 80 + Math.random() * 40;
+                
+                heart.style.setProperty('--x', Math.cos(angle) * distance + 'px');
+                heart.style.setProperty('--y', Math.sin(angle) * distance + 'px');
+                
+                document.body.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 1000);
+            }
+        }
+
+        // 页面点击爱心效果
+        document.addEventListener('touchstart', function(e) {
+            if (e.target.tagName !== 'BUTTON') {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerHTML = '💕';
+                heart.style.left = e.touches[0].clientX + 'px';
+                heart.style.top = e.touches[0].clientY + 'px';
+                
+                document.body.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 2000);
+            }
+        });
+
+        // 桌面端点击支持
+        document.addEventListener('click', function(e) {
+            if (e.target.tagName !== 'BUTTON') {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerHTML = '💕';
+                heart.style.left = e.clientX + 'px';
+                heart.style.top = e.clientY + 'px';
+                
+                document.body.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 2000);
+            }
+        });
+
+        // 初始化
+        createStars();
+
+        // 添加爱心爆炸动画样式
+        const additionalStyles = `
+            .heart-burst {
+                transform: translate(var(--x, 0), var(--y, 0));
+            }
+        `;
+        
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = additionalStyles;
+        document.head.appendChild(styleSheet);
+    </script>
+</body>
+</html>
